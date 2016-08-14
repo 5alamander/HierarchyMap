@@ -1,7 +1,7 @@
 // this is a event package
 
 var count = 0
-const root = Symbol("root")
+const rootSymbol = Symbol("root")
 
 function HierarchyMapError(message) {
   this.name = "HierarchyMapError"
@@ -9,7 +9,7 @@ function HierarchyMapError(message) {
   Error.captureStackTrace(this, this.constructor)
 }
 
-module.exports = class HierarchyMap {
+class HierarchyMapBase {
 
   constructor() {
     count ++
@@ -18,24 +18,8 @@ module.exports = class HierarchyMap {
     this._childrenMap = {}
   }
 
-  static get count() {
-    return count
-  }
-
-  static get error() {
-    return HierarchyMapError
-  }
-
-  static get root() {
-    return root
-  }
-
-  get root() {
-    return root
-  }
-
   // * @return {HierarchyMap}
-  derive(tag, parent = root) {
+  derive(tag, parent = rootSymbol) {
     if (!this._parentsMap.hasOwnProperty(parent)) {
       throw new HierarchyMapError("No such parent in HierarchyMap: " + parent)
     }
@@ -91,7 +75,8 @@ module.exports = class HierarchyMap {
 
   // * @return {Set}
   descendants(tag) {
-    // TODO
+    // TODO may be the same as ancestors
+    throw new Error('not implement')
   }
 
   // * @return {Bool}
@@ -99,4 +84,87 @@ module.exports = class HierarchyMap {
     return this.ancestors(child).has(parent)
   }
 
+}
+
+module.exports = class HierarchyMap extends HierarchyMapBase {
+
+  static get count() {
+    return count
+  }
+
+  static get error() {
+    return HierarchyMapError
+  }
+
+  static get root() {
+    return rootSymbol
+  }
+
+  get root() {
+    return rootSymbol
+  }
+
+  constructor() {
+    super()
+    this._isFreezed = false
+    this._ancestorsCache = {}
+    this._ancestorsArrayCache = {}
+    this._descendantsCache = {}
+  }
+
+  freeze() {
+    this._isFreezed = true
+  }
+
+  // * @return {HierarchyMap}
+  derive(tag, parent) {
+    if (this._isFreezed) {
+      throw new HierarchyMapError("this hierarchy is freezed")
+    }
+    return super.derive(tag, parent)
+  }
+
+  // * @return {HierarchyMap}
+  derives(tag, ...parents) {
+    if (this._isFreezed) {
+      throw new HierarchyMapError("this hierarchy is freezed")
+    }
+    return super.derives(tag, ...parents)
+  }
+
+  // * @return {Set}
+  ancestors(tag) {
+    if (this._isFreezed) {
+      let ret = this._ancestorsCache[tag] || super.ancestors(tag)
+      this._ancestorsCache[tag] = ret
+      return ret
+    }
+    else {
+      return super.ancestors(tag)
+    }
+  }
+
+  // * @return {Array}
+  ancestorsArray(tag) {
+    if (this._isFreezed) {
+      let ret = this._ancestorsArrayCache[tag] || super.ancestorsArray(tag)
+      this._ancestorsArrayCache[tag] = ret
+      return ret
+    }
+    else {
+      return super.ancestorsArray(tag)
+    }
+  }
+
+  // * @return {Set}
+  descendants(tag) {
+    if (this._isFreezed) {
+      let ret = this._descendantsCache[tag] || super.descendants(tag)
+      this._descendantsCache[tag] = ret
+      return ret
+    }
+    else {
+      return super.descendants(tag)
+    }
+  }
 }
