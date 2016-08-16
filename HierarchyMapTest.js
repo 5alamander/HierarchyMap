@@ -1,18 +1,11 @@
-function eqArry(a, b) {
-  if (a.size !== b.size) return false
-  for (let i = 0; i < a.size; i++){
-    if (a[i] !== b[i]) return false
-  }
-  return true
-}
-
 // unit test
+var _ = require('underscore')
 var assert = require('assert')
 var HierarchyMap = require('./HierarchyMap.js')
 
 // test count
 assert.equal(HierarchyMap.count, 0)
-let _ = new HierarchyMap()
+let _first_map_ = new HierarchyMap()
 assert.equal(HierarchyMap.count, 1)
 
 // basic
@@ -36,7 +29,7 @@ amap.derive("atk")
 amap.derive("fire-atk", "atk")
 amap.derive("phy-atk", "atk")
 amap.derives("fire-phy-atk", "fire-atk", "phy-atk")
-assert(eqArry(amap.ancestorsArray("fire-phy-atk"),
+assert(_.isEqual(amap.ancestorsArray("fire-phy-atk"),
               ["phy-atk", "fire-atk", "atk", amap.root]))
 
 amap.derive("o")
@@ -45,7 +38,7 @@ amap.derive("a1", "a0")
 amap.derive("b0", "o")
 amap.derive("b1", "b0")
 amap.derives("ab", "a1", "b1")
-assert(eqArry(amap.ancestorsArray("ab"),
+assert(_.isEqual(amap.ancestorsArray("ab"),
               ["b1", "b0", "a1", "a0", "o", amap.root]))
 assert(amap.ancestors('a0').has('o'))
 assert(amap.ancestors('a0').has(amap.root))
@@ -60,9 +53,22 @@ assert.throws(() => {
 }, 'unexpected error')
 // assert as the same before freezed
 assert.equal(amap.ancestorsArray("fire-phy-atk").indexOf("phy-atk"), 0)
-assert(eqArry(amap.ancestorsArray("fire-phy-atk"),
-              ["phy-atk", "fire-atk", "atk", amap.root]))
-assert(eqArry(amap.ancestorsArray("ab"),
-              ["b1", "b0", "a1", "a0", "o", amap.root]))
+assert(_.isEqual(amap.ancestorsArray("fire-phy-atk"),
+                 ["phy-atk", "fire-atk", "atk", amap.root]))
+assert(_.isEqual(amap.ancestorsArray("ab"),
+                 ["b1", "b0", "a1", "a0", "o", amap.root]))
 assert(amap.ancestors('a0').has('o'))
 assert(amap.ancestors('a0').has(amap.root))
+assert.equal(amap.ancestors('unkown'), null)
+
+// **
+let em = new HierarchyMap([
+  'action',
+  ['interface'],
+  ['p-action', 'action'],
+  ['m-action', 'action'],
+  ['mix-action', 'p-action', 'm-action', 'interface'],
+])
+assert(em.ancestors('p-action').has('action'))
+assert(em.ancestors('mix-action').has('p-action'))
+assert.equal(em.ancestorsArray('mix-action').indexOf('interface'), 0)

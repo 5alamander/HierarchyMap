@@ -63,7 +63,9 @@ class HierarchyMapBase {
         ret.add(p)
       })
     }
-    recurGetP(this.parents(tag))
+    let ps = this.parents(tag)
+    if (!ps) return null
+    recurGetP(ps)
     return ret
   }
 
@@ -76,6 +78,8 @@ class HierarchyMapBase {
   // * @return {Set}
   descendants(tag) {
     // TODO may be the same as ancestors
+    // used in a dynamic HierarchyMap
+    // TODO define the underive also
     throw new Error('not implement')
   }
 
@@ -104,12 +108,14 @@ module.exports = class HierarchyMap extends HierarchyMapBase {
     return rootSymbol
   }
 
-  constructor() {
+  constructor(initList = null) {
     super()
     this._isFreezed = false
     this._ancestorsCache = {}
     this._ancestorsArrayCache = {}
     this._descendantsCache = {}
+
+    if (initList) this.createWithList(initList)
   }
 
   freeze() {
@@ -165,6 +171,21 @@ module.exports = class HierarchyMap extends HierarchyMapBase {
     }
     else {
       return super.descendants(tag)
+    }
+  }
+
+  createWithList(lst) {
+    if (!lst instanceof Array) {
+      throw new HierarchyMapError("create HierarchyMap with list: input is not a list")
+    }
+    for (let item of lst) {
+      if (typeof(item) === 'string') {
+        this.derive(item)
+      }
+      else if (item instanceof Array) {
+        if (item.length === 1) this.derive(item[0])
+        if (item.length > 1) this.derives(item[0], ...item.slice(1))
+      }
     }
   }
 }
