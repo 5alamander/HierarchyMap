@@ -1,6 +1,6 @@
 {
   "name": "hierarchy-map",
-  "version": "0.8.1",
+  "version": "0.8.0",
   "description": "use this package to describe a hierarchy-map",
   "scripts": {
     "test": ""
@@ -14,5 +14,5 @@
   "bugs": {
     "url": "https://github.com/5alamander/HierarchyMap/issues"
   },
-  "homepage": "https://github.com/5alamander/HierarchyMap#readme",
+  "homepage": "https://github.com/5alamander/HierarchyMap#readme"
 }
