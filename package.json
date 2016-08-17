@@ -1,0 +1,21 @@
+{
+  "name": "hierarchy-map",
+  "version": "0.8.0",
+  "description": "use this package to describe a hierarchy-map",
+  "scripts": {
+    "test": "node HierarchyMapTest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5alamander/HierarchyMap.git"
+  },
+  "author": "sa1amander",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/5alamander/HierarchyMap/issues"
+  },
+  "homepage": "https://github.com/5alamander/HierarchyMap#readme",
+  "dependencies": {
+    "underscore": "^1.8.3"
+  }
+}
