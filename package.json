@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/5alamander/HierarchyMap/issues"
   },
-  "homepage": "https://github.com/5alamander/HierarchyMap#readme"
+  "homepage": "https://github.com/5alamander/HierarchyMap#readme",
+  "devDependencies": {
+    "underscore": "^1.8.3"
+  }
 }
