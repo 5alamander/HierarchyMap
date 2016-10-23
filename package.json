@@ -1,11 +1,12 @@
 {
   "name": "hierarchy-map",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "use this package to describe a hierarchy-map",
   "scripts": {
     "test": ""
   },
   "main": "HierarchyMap.js",
+  "types": "HierarchyMap.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/5alamander/HierarchyMap.git"
