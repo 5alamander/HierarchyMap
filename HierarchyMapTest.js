@@ -69,6 +69,7 @@ let em = new HierarchyMap([
   ['m-action', 'action'],
   ['mix-action', 'p-action', 'm-action', 'interface'],
   [1, 'p-action', 'm-action', 'interface'],
+  2,
 ])
 assert(em.ancestors('p-action').has('action'))
 assert(em.ancestors('mix-action').has('p-action'))

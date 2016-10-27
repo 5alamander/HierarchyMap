@@ -1,6 +1,6 @@
 {
   "name": "hierarchy-map",
-  "version": "0.8.3",
+  "version": "0.8.6",
   "description": "use this package to describe a hierarchy-map",
   "scripts": {
     "test": ""

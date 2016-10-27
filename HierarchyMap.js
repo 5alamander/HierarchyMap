@@ -21,7 +21,7 @@ class HierarchyMapBase {
   // * @return {HierarchyMap}
   derive(tag, parent = rootSymbol) {
     if (!this._parentsMap.hasOwnProperty(parent)) {
-      throw new HierarchyMapError("No such parent in HierarchyMap: " + parent)
+      throw new HierarchyMapError(`derive tag: ${tag} No such parent: ${parent} in HierarchyMap`)
     }
     let parr = this._parentsMap[tag]
           || (this._parentsMap[tag] = new Set())
@@ -179,12 +179,19 @@ module.exports = class HierarchyMap extends HierarchyMapBase {
       throw new HierarchyMapError("create HierarchyMap with list: input is not a list")
     }
     for (let item of lst) {
-      if (typeof(item) === 'string') {
-        this.derive(item)
-      }
-      else if (item instanceof Array) {
+      // if (typeof(item) === 'string') {
+      //   this.derive(item)
+      // }
+      // else if (item instanceof Array) {
+      //   if (item.length === 1) this.derive(item[0])
+      //   if (item.length > 1) this.derives(item[0], ...item.slice(1))
+      // }
+      if (item instanceof Array) {
         if (item.length === 1) this.derive(item[0])
         if (item.length > 1) this.derives(item[0], ...item.slice(1))
+      }
+      else {
+        this.derive(item)
       }
     }
   }
